@@ -7,7 +7,7 @@
    2. 704px O MÁS  (44rem) ..... tablet y computadora  -> .row, .about-grid
    3. 832px O MÁS  (52rem) ..... computadora           -> .hero .wrap, .contact-grid
    4. 640px O MENOS (40rem) .... celular               -> ajustes de espacio y botones
-   5. MOVIMIENTO REDUCIDO ...... para quien desactiva animaciones
+   5. TRANSICIONES ............. se aplican siempre: celular, tablet y escritorio
    ===================================================================== */
 
 
@@ -550,20 +550,5 @@ footer img {
   footer .wrap {
     justify-content: center;
     text-align: center;
-  }
-}
-
-
-/* =====================================================================
-   5. MOVIMIENTO REDUCIDO - para quien desactiva animaciones
-   ===================================================================== */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .btn,
-  .theme-toggle .knob,
-  .theme-anim,
-  .theme-anim *:not(.knob) {
-    transition: none;
   }
 }
