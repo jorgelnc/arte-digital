@@ -27,6 +27,7 @@
   --line: #e3e3e8;         /* líneas separadoras */
   --shade: #0a0a0a;        /* sombra del título */
   --on-pink: #0a0a0a;      /* texto sobre los botones rosa */
+  --tile: transparent;     /* fondo del recuadro del logo (sin fondo en modo claro) */
 
   /* Tipografías */
   --display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
@@ -46,6 +47,7 @@
     --pink: #ff3e9a;
     --line: #2a2a32;
     --shade: transparent;
+    --tile: #000;
   }
 }
 
@@ -56,6 +58,7 @@
   --pink: #ff3e9a;
   --line: #2a2a32;
   --shade: transparent;
+  --tile: #000;
 }
 
 /* ---------- Base de la página ---------- */
@@ -282,7 +285,7 @@ h1 {
 /* ---------- Logo de la portada ---------- */
 
 .logo-tile {
-  background: #000;
+  background: var(--tile);
   border-radius: .5rem;
   padding: 1.5rem;
   text-align: center;
@@ -298,7 +301,7 @@ h1 {
 
 .slogan {
   font: 400 2.5rem/1 var(--script);
-  color: #fff;
+  color: var(--ink);
   margin: .5rem 0 0;
 }
 
@@ -435,7 +438,7 @@ footer .wrap {
 footer img {
   height: 44px;
   width: auto;
-  background: #000;
+  background: var(--tile);
   border-radius: .25rem;
 }
 
