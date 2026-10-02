@@ -1,0 +1,566 @@
+/* =====================================================================
+   ARTE DIGITAL - HOJA DE ESTILOS
+   ---------------------------------------------------------------------
+   Cómo leer este archivo (1rem = 16px):
+
+   1. TODOS LOS TAMAÑOS ........ reglas sin @media, valen en cualquier pantalla
+   2. 704px O MÁS  (44rem) ..... tablet y computadora  -> .row, .about-grid
+   3. 832px O MÁS  (52rem) ..... computadora           -> .hero .wrap, .contact-grid
+   4. 640px O MENOS (40rem) .... celular               -> ajustes de espacio y botones
+   5. MOVIMIENTO REDUCIDO ...... para quien desactiva animaciones
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. TODOS LOS TAMAÑOS
+   ===================================================================== */
+
+/* ---------- Colores y tipografías (variables) ---------- */
+
+:root {
+  /* Colores de la marca */
+  --paper: #fff;           /* fondo de la página */
+  --ink: #0a0a0a;          /* color del texto */
+  --pink: #ff0f7b;
+  --cyan: #00aeef;
+  --yellow: #ffe600;
+  --line: #e3e3e8;         /* líneas separadoras */
+  --shade: #0a0a0a;        /* sombra del título */
+  --on-pink: #0a0a0a;      /* texto sobre los botones rosa */
+
+  /* Tipografías */
+  --display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --script: "Mrs Saint Delafield", "Brush Script MT", cursive;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);       /* respeta la muesca del celular */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Modo oscuro automático (según el celular o la computadora) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0c0c10;
+    --ink: #f6f6f8;
+    --pink: #ff3e9a;
+    --line: #2a2a32;
+    --shade: transparent;
+  }
+}
+
+/* Modo oscuro forzado */
+:root[data-theme="dark"] {
+  --paper: #0c0c10;
+  --ink: #f6f6f8;
+  --pink: #ff3e9a;
+  --line: #2a2a32;
+  --shade: transparent;
+}
+
+/* ---------- Base de la página ---------- */
+
+html {
+  height: 100%;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  scroll-behavior: smooth;                 /* desplazamiento suave al tocar el menú */
+  -webkit-text-size-adjust: 100%;          /* evita que el celular agrande el texto */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--body);
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+/* ---------- Franja de colores superior ---------- */
+
+.cmyk {
+  height: 6px;
+  background: linear-gradient(90deg,
+    var(--cyan) 0 25%,
+    var(--pink) 25% 50%,
+    var(--yellow) 50% 75%,
+    #0a0a0a 75%);
+}
+
+/* ---------- Contenedor central ---------- */
+
+.wrap {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ---------- Encabezado y menú ---------- */
+
+header .wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;                          /* el menú baja de línea si no cabe */
+  gap: 1rem;
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.mark {
+  font: 800 1.25rem var(--display);
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+nav a {
+  text-decoration: none;
+  font-weight: 600;
+  padding: .5rem 0;
+}
+
+nav a:hover {
+  color: var(--pink);
+}
+
+/* ---------- Interruptor modo claro / oscuro (sol y luna) ---------- */
+
+.theme-toggle {
+  position: relative;
+  width: 3.75rem;
+  height: 2rem;
+  padding: 0;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* Amplía el área de toque a 44px sin cambiar el aspecto */
+.theme-toggle::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+/* Círculo que se desliza */
+.theme-toggle .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--pink);
+  transition: transform .6s ease;
+}
+
+.theme-toggle[aria-checked="true"] .knob {
+  transform: translateX(28px);              /* se mueve a la luna */
+}
+
+.theme-toggle .ico {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+}
+
+.theme-toggle .sun  { left: 6px; }
+.theme-toggle .moon { right: 6px; }
+
+/* El icono activo va sobre el círculo rosa */
+.theme-toggle[aria-checked="false"] .sun,
+.theme-toggle[aria-checked="true"] .moon {
+  color: #0a0a0a;
+}
+
+/* ---------- Transición lenta al cambiar de modo claro / oscuro ----------
+   La clase .theme-anim se agrega un segundo desde el JavaScript
+   cada vez que se toca el interruptor. */
+
+.theme-anim,
+.theme-anim *:not(.knob) {
+  transition-property: background-color, color, border-color, box-shadow, text-shadow;
+  transition-duration: .9s;                 /* velocidad del cambio de modo (en segundos) */
+  transition-timing-function: ease;
+}
+
+/* ---------- Portada ---------- */
+
+.hero {
+  padding: 3rem 0 5rem;
+}
+
+.hero .wrap {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+h1 {
+  font: 800 clamp(2.75rem, 9vw, 5.75rem)/.95 var(--display);   /* crece según el ancho de pantalla */
+  letter-spacing: -.03em;
+  margin: 0 0 1.5rem;
+  max-width: 12ch;
+  color: var(--pink);
+  text-shadow: .04em .04em 0 var(--shade);
+}
+
+.hero p {
+  max-width: 34rem;
+  font-size: 1.25rem;
+  margin: 0 0 2rem;
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
+  display: inline-flex;                     /* icono + texto en una línea */
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  background: var(--pink);
+  color: var(--on-pink);
+  padding: .9rem 1.6rem;
+  min-height: 44px;                         /* tamaño cómodo para tocar */
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: .25rem;
+  transition: background-color .8s ease, color .8s ease, box-shadow .8s ease;   /* velocidad del hover (en segundos) */
+}
+
+/* Botón con borde (WhatsApp y TikTok) */
+.btn.alt {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+/* Icono pequeño dentro del botón (toma el color del texto) */
+.btn .icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+}
+
+/* Hover (y teclado): blanco translúcido con borde rosa.
+   Va después de .btn.alt para que funcione en todos los botones. */
+.btn:hover,
+.btn:focus-visible {
+  background: rgba(255, 255, 255, .75);
+  color: #0a0a0a;
+  box-shadow: inset 0 0 0 2px var(--pink);
+}
+
+/* ---------- Logo de la portada ---------- */
+
+.logo-tile {
+  background: #000;
+  border-radius: .5rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.logo-tile img {
+  display: block;
+  width: 100%;
+  max-width: 24rem;
+  height: auto;
+  margin: 0 auto;
+}
+
+.slogan {
+  font: 400 2.5rem/1 var(--script);
+  color: #fff;
+  margin: .5rem 0 0;
+}
+
+/* ---------- Títulos y secciones ---------- */
+
+h2 {
+  font: 800 clamp(1.75rem, 5vw, 2.5rem)/1.1 var(--display);
+  letter-spacing: -.02em;
+  margin: 0 0 2rem;
+}
+
+section {
+  padding: 3rem 0;
+}
+
+/* ---------- Servicios ---------- */
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;               /* una columna en pantallas chicas */
+  gap: .35rem 2rem;
+  padding: 1.4rem 0 1.4rem 1rem;
+  border-top: 1px solid var(--line);
+  border-left: 6px solid var(--c);          /* color según el servicio */
+}
+
+.row:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+/* Color de la marca lateral de cada servicio */
+.row:nth-child(2) { --c: var(--cyan); }
+.row:nth-child(3) { --c: var(--pink); }
+.row:nth-child(4) { --c: var(--yellow); }
+.row:nth-child(5) { --c: var(--ink); }
+
+.row h3 {
+  font: 500 1.35rem/1.2 var(--display);
+  margin: 0;
+}
+
+.row p {
+  margin: 0;
+  max-width: 34rem;
+}
+
+/* ---------- Sobre Nosotros (misión y visión) ---------- */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;               /* una columna en pantallas chicas */
+  gap: 2rem;
+}
+
+.about-item {
+  padding-left: 1rem;
+  border-left: 6px solid var(--c);          /* color según el bloque */
+}
+
+.about-item:nth-child(1) { --c: var(--cyan); }
+.about-item:nth-child(2) { --c: var(--pink); }
+
+.about-item h3 {
+  font: 500 1.35rem/1.2 var(--display);
+  margin: 0 0 .5rem;
+}
+
+.about-item p {
+  margin: 0;
+  max-width: 34rem;
+}
+
+/* ---------- Contacto ---------- */
+
+.contact p {
+  max-width: 34rem;
+  margin: 0 0 1.5rem;
+}
+
+.contact-grid {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;                   /* botones uno debajo del otro */
+  align-items: center;                      /* centrados */
+  gap: 1rem;
+}
+
+/* Los tres botones con el mismo ancho */
+.links .btn {
+  width: 100%;
+  max-width: 20rem;
+}
+
+/* QR de TikTok */
+.qr {
+  margin: 0;
+  text-align: center;
+}
+
+.qr img {
+  display: block;
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+  margin: 0 auto;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .2));
+}
+
+.qr figcaption {
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+/* ---------- Pie de página ---------- */
+
+footer {
+  padding: 2rem 0 3rem;
+  border-top: 1px solid var(--line);
+  font-size: .95rem;
+}
+
+footer .wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+footer img {
+  height: 44px;
+  width: auto;
+  background: #000;
+  border-radius: .25rem;
+}
+
+
+/* =====================================================================
+   2. PANTALLAS DE 704px O MÁS (44rem) - tablet y computadora
+   ===================================================================== */
+
+@media (min-width: 44rem) {
+
+  /* Servicios: título a la izquierda y descripción a la derecha */
+  .row {
+    grid-template-columns: 18rem 1fr;
+  }
+
+  /* Sobre Nosotros: misión y visión lado a lado */
+  .about-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* =====================================================================
+   3. PANTALLAS DE 832px O MÁS (52rem) - computadora
+   ===================================================================== */
+
+@media (min-width: 52rem) {
+
+  /* Portada: texto a la izquierda y logo a la derecha */
+  .hero .wrap {
+    grid-template-columns: 1.3fr 1fr;
+  }
+
+  /* Contacto: texto y botones a la izquierda, QR a la derecha */
+  .contact-grid {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+
+/* =====================================================================
+   4. PANTALLAS DE 640px O MENOS (40rem) - celular
+   ===================================================================== */
+
+@media (max-width: 40rem) {
+
+  .wrap {
+    padding: 0 1.25rem;
+  }
+
+  header .wrap {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+  }
+
+  nav {
+    gap: 1.25rem;
+    order: 3;                               /* el menú pasa a una segunda línea */
+    width: 100%;
+  }
+
+  .mark {
+    order: 1;
+  }
+
+  .theme-toggle {
+    order: 2;                               /* interruptor junto al nombre */
+  }
+
+  .hero {
+    padding: 1.5rem 0 3rem;
+  }
+
+  .hero .wrap {
+    gap: 2rem;
+  }
+
+  .hero p {
+    font-size: 1.125rem;
+  }
+
+  section {
+    padding: 2rem 0;
+  }
+
+  h2 {
+    margin-bottom: 1.25rem;
+  }
+
+  /* Botones a todo el ancho, uno debajo del otro */
+  .btn {
+    display: flex;
+    width: 100%;
+  }
+
+  .links {
+    flex-direction: column;
+    gap: .75rem;
+  }
+
+  .slogan {
+    font-size: 2rem;
+  }
+
+  .row {
+    padding-left: .9rem;
+  }
+
+  footer .wrap {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+
+/* =====================================================================
+   5. MOVIMIENTO REDUCIDO - para quien desactiva animaciones
+   ===================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .btn,
+  .theme-toggle .knob,
+  .theme-anim,
+  .theme-anim *:not(.knob) {
+    transition: none;
+  }
+}
