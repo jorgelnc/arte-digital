@@ -285,7 +285,6 @@ h1 {
 /* ---------- Logo de la portada ---------- */
 
 .logo-tile {
-  background: var(--tile);
   border-radius: .5rem;
   padding: 1.5rem;
   text-align: center;
@@ -438,7 +437,6 @@ footer .wrap {
 footer img {
   height: 44px;
   width: auto;
-  background: var(--tile);
   border-radius: .25rem;
 }
 
